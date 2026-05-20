@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: Apache-2.0 */
 import type { ExplorerStrategy, CatalogLoad, FieldsLoad, QueryBuildState } from "../types.ts";
 import { cacheKey, getCached, setCached } from "../cache.ts";
 import type { SfDataExplorerTransport } from "../transport.ts";
@@ -6,8 +7,12 @@ import { escapeSoslTerm, validateFindOnly } from "../validators.ts";
 import { fit, pad } from "../text.ts";
 import type { CoreFieldMeta, CoreSObjectMeta } from "./soql.ts";
 
-interface SObjectsResponse { sobjects?: CoreSObjectMeta[] }
-interface DescribeResponse { fields?: CoreFieldMeta[] }
+interface SObjectsResponse {
+  sobjects?: CoreSObjectMeta[];
+}
+interface DescribeResponse {
+  fields?: CoreFieldMeta[];
+}
 
 function cleanLabel(label: string | undefined, name: string): string {
   if (!label || /^__MISSING LABEL__/i.test(label)) return "";
@@ -23,7 +28,8 @@ function sortObjects(a: CoreSObjectMeta, b: CoreSObjectMeta): number {
 export function buildSosl(state: QueryBuildState<CoreSObjectMeta>): string {
   const term = escapeSoslTerm(state.whereClause.trim() || "sample");
   const obj = state.selectedObject;
-  if (!obj?.name) return `FIND {${term}}\nIN ALL FIELDS\nRETURNING Account(Id, Name)\nLIMIT ${state.limit}`;
+  if (!obj?.name)
+    return `FIND {${term}}\nIN ALL FIELDS\nRETURNING Account(Id, Name)\nLIMIT ${state.limit}`;
   const fields = state.selectedFieldNames.length ? state.selectedFieldNames : ["Id"];
   return `FIND {${term}}\nIN ALL FIELDS\nRETURNING ${obj.name}(${fields.join(", ")})\nLIMIT ${state.limit}`;
 }
@@ -33,7 +39,10 @@ export function defaultSearchFields(fields: CoreFieldMeta[]): string[] {
   const preferred = ["Id", "Name", "FirstName", "LastName", "Email", "Phone"];
   const out = preferred.filter((name) => names.has(name));
   if (out.length) return out.slice(0, 6);
-  return fields.slice(0, 5).map((f) => f.name).filter(Boolean);
+  return fields
+    .slice(0, 5)
+    .map((f) => f.name)
+    .filter(Boolean);
 }
 
 export function createSoslStrategy(args: {
@@ -55,28 +64,62 @@ export function createSoslStrategy(args: {
       const ctx = await transport.resolveTarget(org === "default" ? undefined : org);
       const key = cacheKey(["catalog", "sosl", ctx.targetOrg, ctx.apiVersion]);
       const cached = getCached<CoreSObjectMeta[]>(key, force);
-      if (cached) return { value: cached.value, cached: true, loadedAt: cached.loadedAt, kindLabel: "SOSL searchable sObject catalog" };
-      const resp = await transport.callRest<SObjectsResponse>({ targetOrg: org, method: "GET", path: "/sobjects" });
+      if (cached)
+        return {
+          value: cached.value,
+          cached: true,
+          loadedAt: cached.loadedAt,
+          kindLabel: "SOSL searchable sObject catalog",
+        };
+      const resp = await transport.callRest<SObjectsResponse>({
+        targetOrg: org,
+        method: "GET",
+        path: "/sobjects",
+      });
       const value = (resp.body.sobjects ?? [])
         .filter((o) => o.queryable && o.searchable && !o.deprecatedAndHidden)
         .sort(sortObjects);
       const stored = setCached(key, value);
-      return { value: stored.value, cached: false, loadedAt: stored.loadedAt, kindLabel: "SOSL searchable sObject catalog" };
+      return {
+        value: stored.value,
+        cached: false,
+        loadedAt: stored.loadedAt,
+        kindLabel: "SOSL searchable sObject catalog",
+      };
     },
     loadFields: async (obj, force): Promise<FieldsLoad<CoreFieldMeta>> => {
       const ctx = await transport.resolveTarget(org === "default" ? undefined : org);
       const key = cacheKey(["fields", "sosl", ctx.targetOrg, ctx.apiVersion, obj.name]);
       const cached = getCached<CoreFieldMeta[]>(key, force);
-      if (cached) return { value: cached.value, cached: true, loadedAt: cached.loadedAt, kindLabel: `${obj.name} describe` };
-      const resp = await transport.callRest<DescribeResponse>({ targetOrg: org, method: "GET", path: `/sobjects/${encodeURIComponent(obj.name)}/describe` });
-      const value = (resp.body.fields ?? []).filter((f) => f.name).sort((a, b) => a.name.localeCompare(b.name));
+      if (cached)
+        return {
+          value: cached.value,
+          cached: true,
+          loadedAt: cached.loadedAt,
+          kindLabel: `${obj.name} describe`,
+        };
+      const resp = await transport.callRest<DescribeResponse>({
+        targetOrg: org,
+        method: "GET",
+        path: `/sobjects/${encodeURIComponent(obj.name)}/describe`,
+      });
+      const value = (resp.body.fields ?? [])
+        .filter((f) => f.name)
+        .sort((a, b) => a.name.localeCompare(b.name));
       const stored = setCached(key, value);
-      return { value: stored.value, cached: false, loadedAt: stored.loadedAt, kindLabel: `${obj.name} describe` };
+      return {
+        value: stored.value,
+        cached: false,
+        loadedAt: stored.loadedAt,
+        kindLabel: `${obj.name} describe`,
+      };
     },
     objectName: (o) => o.name,
     objectDisplayName: (o) => o.name,
-    objectSubtitle: (o) => [cleanLabel(o.label, o.name), o.custom ? "Custom" : "Standard"].filter(Boolean).join(" · "),
-    objectQueryHay: (o) => `${o.name} ${o.label} ${o.labelPlural ?? ""} ${o.custom ? "custom" : "standard"}`,
+    objectSubtitle: (o) =>
+      [cleanLabel(o.label, o.name), o.custom ? "Custom" : "Standard"].filter(Boolean).join(" · "),
+    objectQueryHay: (o) =>
+      `${o.name} ${o.label} ${o.labelPlural ?? ""} ${o.custom ? "custom" : "standard"}`,
     objectRow: (o, selected, active, width, theme) => {
       const status = active ? theme.fg("success", pad("ACTIVE", 7)) : pad("", 7);
       const type = pad(theme.fg(o.custom ? "borderAccent" : "muted", o.custom ? "CUST" : "STD"), 5);
@@ -94,7 +137,11 @@ export function createSoslStrategy(args: {
     validateQuery: validateFindOnly,
     runQuery: async (queryText, signal) => {
       const resp = await transport.searchSosl({ targetOrg: org, sosl: queryText, signal });
-      return normalizeCoreSearchResult(resp.body, { query: queryText, targetOrg: resp.context.targetOrg ?? org, apiVersion: resp.context.apiVersion });
+      return normalizeCoreSearchResult(resp.body, {
+        query: queryText,
+        targetOrg: resp.context.targetOrg ?? org,
+        apiVersion: resp.context.apiVersion,
+      });
     },
     exportBaseName: (state) => `sf-data-explorer-sosl-${state.selectedObject?.name ?? "search"}`,
   };

@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: Apache-2.0 */
 import type { ExplorerMode } from "./types.ts";
 
 export interface ParsedCommandArgs {
@@ -23,7 +24,9 @@ export function parseCommandArgs(args: string, defaultOrg = DEFAULT_ORG): Parsed
   const parts = args.trim().split(/\s+/).filter(Boolean);
   const help = parts.some((p) => HELP_FLAGS.has(p.toLowerCase()));
   const forceRefresh = parts.some((p) => REFRESH_FLAGS.has(p.toLowerCase()));
-  const modeToken = parts.find((p) => isExplorerMode(p.toLowerCase()))?.toLowerCase() as ExplorerMode | undefined;
+  const modeToken = parts.find((p) => isExplorerMode(p.toLowerCase()))?.toLowerCase() as
+    | ExplorerMode
+    | undefined;
   const positional = parts.filter((p) => {
     const lower = p.toLowerCase();
     return !isExplorerMode(lower) && !REFRESH_FLAGS.has(lower) && !HELP_FLAGS.has(lower);
@@ -33,7 +36,7 @@ export function parseCommandArgs(args: string, defaultOrg = DEFAULT_ORG): Parsed
   //   /sf-data-explorer soql Account wh    -> object=Account, org=wh
   //   /sf-data-explorer sql ssot__X__dlm wh -> object=ssot__X__dlm, org=wh
   const object = positional.length >= 2 ? positional[0] : undefined;
-  const org = positional.length >= 2 ? positional[1]! : positional[0] ?? defaultOrg;
+  const org = positional.length >= 2 ? positional[1]! : (positional[0] ?? defaultOrg);
   return { mode: modeToken, object, org, forceRefresh, help };
 }
 

@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: Apache-2.0 */
 import { describe, expect, it } from "vitest";
 import { buildHelpText, parseCommandArgs } from "../lib/command.ts";
 
@@ -22,8 +23,16 @@ describe("parseCommandArgs", () => {
   });
 
   it("parses object deep links", () => {
-    expect(parseCommandArgs("soql Account wh", "default")).toMatchObject({ mode: "soql", object: "Account", org: "wh" });
-    expect(parseCommandArgs("sql ssot__Individual__dlm wh", "default")).toMatchObject({ mode: "sql", object: "ssot__Individual__dlm", org: "wh" });
+    expect(parseCommandArgs("soql Account wh", "default")).toMatchObject({
+      mode: "soql",
+      object: "Account",
+      org: "wh",
+    });
+    expect(parseCommandArgs("sql ssot__Individual__dlm wh", "default")).toMatchObject({
+      mode: "sql",
+      object: "ssot__Individual__dlm",
+      org: "wh",
+    });
   });
 
   it("detects help flags", () => {

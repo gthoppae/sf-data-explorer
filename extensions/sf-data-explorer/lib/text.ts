@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: Apache-2.0 */
 import { truncateToWidth, visibleWidth } from "@earendil-works/pi-tui";
 
 export type ThemeLike = {
@@ -60,7 +61,9 @@ export function wrapPlain(text: string, width: number, maxLines = 100): string[]
 }
 
 export function quoteData360Identifier(identifier: string): string {
-  return /^[A-Za-z_][A-Za-z0-9_]*$/.test(identifier) ? identifier : `"${identifier.replace(/"/g, '""')}"`;
+  return /^[A-Za-z_][A-Za-z0-9_]*$/.test(identifier)
+    ? identifier
+    : `"${identifier.replace(/"/g, '""')}"`;
 }
 
 export function timestampForFile(d = new Date()): string {
@@ -69,5 +72,10 @@ export function timestampForFile(d = new Date()): string {
 }
 
 export function safeFilePart(text: string): string {
-  return text.replace(/[^A-Za-z0-9_.-]+/g, "_").replace(/^_+|_+$/g, "").slice(0, 80) || "result";
+  return (
+    text
+      .replace(/[^A-Za-z0-9_.-]+/g, "_")
+      .replace(/^_+|_+$/g, "")
+      .slice(0, 80) || "result"
+  );
 }

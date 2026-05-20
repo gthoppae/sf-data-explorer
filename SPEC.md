@@ -17,15 +17,15 @@ Existing `sf-pi` extension conventions are consistent:
 
 Recommended implementation naming:
 
-| Surface | Recommended name |
-| --- | --- |
-| Extension directory | `extensions/sf-data-explorer/` |
-| Manifest id | `sf-data-explorer` |
-| Display name | `SF Data Explorer` |
-| Primary command | `/sf-data-explorer` |
-| TypeScript factory | `sfDataExplorer` |
-| Optional standalone package name | `sf-data-explorer` |
-| User-facing project codename | `sf-dataExplorer` is acceptable in docs, but not as the manifest id |
+| Surface                          | Recommended name                                                    |
+| -------------------------------- | ------------------------------------------------------------------- |
+| Extension directory              | `extensions/sf-data-explorer/`                                      |
+| Manifest id                      | `sf-data-explorer`                                                  |
+| Display name                     | `SF Data Explorer`                                                  |
+| Primary command                  | `/sf-data-explorer`                                                 |
+| TypeScript factory               | `sfDataExplorer`                                                    |
+| Optional standalone package name | `sf-data-explorer`                                                  |
+| User-facing project codename     | `sf-dataExplorer` is acceptable in docs, but not as the manifest id |
 
 Rationale: use kebab-case for ids, paths, commands, and package-like names to match the rest of `sf-pi`; use `SF Data Explorer` as the user-facing product label.
 
@@ -92,11 +92,11 @@ The architecture should leave clear extension points for these later, but v1 mus
 
 Modes:
 
-| Mode | Meaning |
-| --- | --- |
+| Mode   | Meaning                                               |
+| ------ | ----------------------------------------------------- |
 | `soql` | Core Salesforce SOQL explorer over queryable sObjects |
-| `sosl` | Core Salesforce SOSL explorer |
-| `sql` | Data 360 SQL explorer over DMO/DLO objects |
+| `sosl` | Core Salesforce SOSL explorer                         |
+| `sql`  | Data 360 SQL explorer over DMO/DLO objects            |
 
 Required examples:
 
@@ -466,30 +466,30 @@ state: generated | edited
 
 Common keys:
 
-| Key | Action |
-| --- | --- |
-| `?` | Show in-TUI shortcut help overlay |
-| `t` | Open in-TUI explorer switcher: SOQL / SOSL / Data 360 SQL |
-| `←` / `→` | Move between panes |
-| `↑` / `↓` | Move cursor in active pane |
-| `/` | Filter active object/field pane |
-| `enter` | Select object / toggle field / open result detail |
-| `space` | Toggle field |
-| `a` | Select all visible fields |
-| `n` | Select none visible |
-| `i` | Invert visible field selection |
-| `w` | Edit `WHERE` / SOSL search term depending mode |
-| `l` | Edit `LIMIT` |
-| `e` | Edit full query text |
-| `b` | Rebuild query from current selections |
-| `r` | Run current query text |
-| `c` | Close explorer and copy current query text to Pi editor |
-| `s` | Open in-TUI save menu for latest result as JSON or CSV under `.sf-data-explorer/exports/`; stay in explorer after saving |
-| `f` | Force refresh active catalog or field describe |
-| `z` | Toggle 80% focus pane |
-| `v` | Toggle columns / accordion layout |
-| `q` | Close, with quit confirmation if query/result is dirty |
-| `esc` | Back / clear result / close detail / close explorer |
+| Key       | Action                                                                                                                   |
+| --------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `?`       | Show in-TUI shortcut help overlay                                                                                        |
+| `t`       | Open in-TUI explorer switcher: SOQL / SOSL / Data 360 SQL                                                                |
+| `←` / `→` | Move between panes                                                                                                       |
+| `↑` / `↓` | Move cursor in active pane                                                                                               |
+| `/`       | Filter active object/field pane                                                                                          |
+| `enter`   | Select object / toggle field / open result detail                                                                        |
+| `space`   | Toggle field                                                                                                             |
+| `a`       | Select all visible fields                                                                                                |
+| `n`       | Select none visible                                                                                                      |
+| `i`       | Invert visible field selection                                                                                           |
+| `w`       | Edit `WHERE` / SOSL search term depending mode                                                                           |
+| `l`       | Edit `LIMIT`                                                                                                             |
+| `e`       | Edit full query text                                                                                                     |
+| `b`       | Rebuild query from current selections                                                                                    |
+| `r`       | Run current query text                                                                                                   |
+| `c`       | Close explorer and copy current query text to Pi editor                                                                  |
+| `s`       | Open in-TUI save menu for latest result as JSON or CSV under `.sf-data-explorer/exports/`; stay in explorer after saving |
+| `f`       | Force refresh active catalog or field describe                                                                           |
+| `z`       | Toggle 80% focus pane                                                                                                    |
+| `v`       | Toggle columns / accordion layout                                                                                        |
+| `q`       | Close, with quit confirmation if query/result is dirty                                                                   |
+| `esc`     | Back / clear result / close detail / close explorer                                                                      |
 
 Mode-specific keys may be added but should not conflict with common keys.
 
@@ -527,7 +527,7 @@ GET /sobjects
 Use response `sobjects` and keep only rows where:
 
 ```ts
-sobject.queryable === true
+sobject.queryable === true;
 ```
 
 Default v1 filter:
@@ -686,7 +686,7 @@ GET /query?q=<encoded queryText>
 Transport helper:
 
 ```ts
-querySoql({ targetOrg, soql: queryText, queryAll: false })
+querySoql({ targetOrg, soql: queryText, queryAll: false });
 ```
 
 Response shape:
@@ -738,7 +738,7 @@ Initial version:
 Use the same core sObject catalog from SOQL mode, but default to objects where:
 
 ```ts
-sobject.searchable === true
+sobject.searchable === true;
 ```
 
 If `searchable` is not available or false for objects the user expects, allow future toggle:
@@ -1052,10 +1052,10 @@ Export safety:
 
 v1 must only issue read-only calls:
 
-| Mode | Allowed calls |
-| --- | --- |
-| SOQL | `GET /sobjects`, `GET /sobjects/{name}/describe`, `GET /query` |
-| SOSL | `GET /sobjects`, `GET /sobjects/{name}/describe`, `GET /search` |
+| Mode         | Allowed calls                                                     |
+| ------------ | ----------------------------------------------------------------- |
+| SOQL         | `GET /sobjects`, `GET /sobjects/{name}/describe`, `GET /query`    |
+| SOSL         | `GET /sobjects`, `GET /sobjects/{name}/describe`, `GET /search`   |
 | Data 360 SQL | compact metadata `GET`s, `POST /ssot/query-sql` with `SELECT` SQL |
 
 Safety requirements:
@@ -1082,13 +1082,13 @@ No LLM is needed for basic use. v1 should not depend on model availability.
 
 Future optional hooks can be implemented as commands or keybindings that call Pi only when explicitly invoked:
 
-| Hook | Possible key | Description |
-| --- | --- | --- |
-| Generate query | `g` | Prompt LLM with selected object/fields and user intent; write draft into editable query text. |
-| Explain query | `x` | Explain current SOQL/SOSL/SQL. |
-| Suggest fields | `?` | Suggest useful fields for selected object based on labels/types. |
-| Summarize sample | `u` | Summarize visible result sample. |
-| Fix query error | `F` | Provide current query and Salesforce error to LLM and ask for corrected draft. |
+| Hook             | Possible key | Description                                                                                   |
+| ---------------- | ------------ | --------------------------------------------------------------------------------------------- |
+| Generate query   | `g`          | Prompt LLM with selected object/fields and user intent; write draft into editable query text. |
+| Explain query    | `x`          | Explain current SOQL/SOSL/SQL.                                                                |
+| Suggest fields   | `?`          | Suggest useful fields for selected object based on labels/types.                              |
+| Summarize sample | `u`          | Summarize visible result sample.                                                              |
+| Fix query error  | `F`          | Provide current query and Salesforce error to LLM and ask for corrected draft.                |
 
 LLM hook constraints:
 
@@ -1104,13 +1104,13 @@ Potential settings under `sfPi.dataExplorer`:
 ```ts
 interface SfDataExplorerSettings {
   defaultMode?: "soql" | "sosl" | "sql";
-  defaultLimit: number;              // default 25
-  maxInlineRows: number;             // default 2000
-  cacheTtlMs: number;                // default 15m
-  exportDir: string;                 // default .sf-data-explorer/exports
-  showInternalObjects: boolean;      // default false, future
-  includeToolingApi: boolean;        // default false, future
-  confirmNoLimitQueries: boolean;    // default true
+  defaultLimit: number; // default 25
+  maxInlineRows: number; // default 2000
+  cacheTtlMs: number; // default 15m
+  exportDir: string; // default .sf-data-explorer/exports
+  showInternalObjects: boolean; // default false, future
+  includeToolingApi: boolean; // default false, future
+  confirmNoLimitQueries: boolean; // default true
 }
 ```
 
@@ -1337,7 +1337,7 @@ Recommended defaults:
 
 The current package scaffold implements the v1 deterministic explorer flows described above:
 
-- Package manifest, README, TypeScript config, and Pi extension entry point.
+- Package manifest, extension manifest, extension README, extension AGENTS.md, TypeScript config, and Pi extension entry point. Source and tests live under `extensions/sf-data-explorer/{lib,tests}` to match sf-pi extension layout.
 - Unified `/sf-data-explorer` command with mode picker and direct modes `soql`, `sosl`, and `sql`.
 - Deep links of the form `/sf-data-explorer soql Account wh`, `/sf-data-explorer sosl Contact wh`, and `/sf-data-explorer sql ssot__Individual__dlm wh`.
 - Lazy dynamic-import transport over sf-pi internals, using `@salesforce/core` connection plumbing and sf-pi target-org/API-version resolution.
@@ -1348,6 +1348,7 @@ The current package scaffold implements the v1 deterministic explorer flows desc
 - Data 360 SQL mode over DMO/DLO objects. Catalog loading uses `/ssot/metadata-entities`; selected-object field loading uses `/ssot/metadata?entityName=...`; SQL execution uses `/ssot/query-sql` only for the user's visible SQL query. Field extraction supports the live `/ssot/metadata` envelope shape `metadata[0].fields[]` as well as other known wrapped shapes, maps `displayName` and `businessType`, and surfaces `/ssot/metadata` error bodies instead of silently showing an empty field list.
 - In-memory cache with 15-minute TTL. The cache is process-local, not persisted to disk, and is cleared on session start/shutdown or forced refresh.
 - Automated tests for command parsing, query builders, read-only validators, result normalization, export helpers, mocked transport endpoint usage, and Data 360 `/ssot/metadata` field extraction/error handling.
+- `SF_PI_MERGE_CHECKLIST.md` records merge-time checks and remaining sf-pi integration steps, including standard `/sf-*` command panel requirements.
 
 Current validation command:
 

@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: Apache-2.0 */
 import type { ExplorerMode, RunResult, SpaRow } from "./types.ts";
 
 export interface CoreQueryResponse {
@@ -7,7 +8,9 @@ export interface CoreQueryResponse {
   nextRecordsUrl?: string;
 }
 
-export type CoreSearchResponse = Array<Record<string, unknown>> | { searchRecords?: Array<Record<string, unknown>>; [key: string]: unknown };
+export type CoreSearchResponse =
+  | Array<Record<string, unknown>>
+  | { searchRecords?: Array<Record<string, unknown>>; [key: string]: unknown };
 
 export interface Data360SqlResponse {
   data?: unknown[][];
@@ -45,7 +48,10 @@ function columnsFromRows(rows: SpaRow[], preferred: string[] = []): string[] {
   return columns;
 }
 
-export function normalizeCoreQueryResult(raw: CoreQueryResponse, args: { query: string; targetOrg: string; apiVersion?: string; preferredColumns?: string[] }): RunResult {
+export function normalizeCoreQueryResult(
+  raw: CoreQueryResponse,
+  args: { query: string; targetOrg: string; apiVersion?: string; preferredColumns?: string[] },
+): RunResult {
   const rows = (raw.records ?? []).map(withoutAttributes);
   return {
     rows,
@@ -59,7 +65,10 @@ export function normalizeCoreQueryResult(raw: CoreQueryResponse, args: { query: 
   };
 }
 
-export function normalizeCoreSearchResult(raw: CoreSearchResponse, args: { query: string; targetOrg: string; apiVersion?: string; preferredColumns?: string[] }): RunResult {
+export function normalizeCoreSearchResult(
+  raw: CoreSearchResponse,
+  args: { query: string; targetOrg: string; apiVersion?: string; preferredColumns?: string[] },
+): RunResult {
   const records = Array.isArray(raw) ? raw : (raw?.searchRecords ?? []);
   const rows = records.map((record) => {
     const attrs = record.attributes as { type?: string } | undefined;
@@ -77,7 +86,10 @@ export function normalizeCoreSearchResult(raw: CoreSearchResponse, args: { query
   };
 }
 
-export function normalizeData360SqlResult(raw: Data360SqlResponse, args: { query: string; targetOrg: string; apiVersion?: string }): RunResult {
+export function normalizeData360SqlResult(
+  raw: Data360SqlResponse,
+  args: { query: string; targetOrg: string; apiVersion?: string },
+): RunResult {
   const columns = (raw.metadata ?? []).map((m, i) => m.name || `col_${i + 1}`);
   const rows: SpaRow[] = (raw.data ?? []).map((row) => {
     const out: SpaRow = {};

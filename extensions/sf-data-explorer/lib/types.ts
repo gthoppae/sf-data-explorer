@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: Apache-2.0 */
 export type ExplorerMode = "soql" | "sosl" | "sql";
 
 export type SpaRow = Record<string, unknown>;
@@ -55,7 +56,13 @@ export interface ExplorerStrategy<TObject, TField> {
   objectDisplayName(obj: TObject): string;
   objectSubtitle(obj: TObject): string;
   objectQueryHay(obj: TObject): string;
-  objectRow?(obj: TObject, selected: boolean, active: boolean, width: number, theme: { bold: (s: string) => string; fg: (color: string, s: string) => string }): string[];
+  objectRow?(
+    obj: TObject,
+    selected: boolean,
+    active: boolean,
+    width: number,
+    theme: { bold: (s: string) => string; fg: (color: string, s: string) => string },
+  ): string[];
   fieldName(field: TField): string;
   fieldLabel(field: TField): string;
   fieldQueryHay(field: TField): string;

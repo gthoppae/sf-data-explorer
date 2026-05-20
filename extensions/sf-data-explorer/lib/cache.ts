@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: Apache-2.0 */
 const DEFAULT_CACHE_TTL_MS = 15 * 60 * 1000;
 
 type CacheEntry<T> = {
@@ -12,7 +13,10 @@ export function cacheKey(parts: Array<string | number | undefined>): string {
   return parts.map((p) => String(p ?? "")).join("|");
 }
 
-export function getCached<T>(key: string, force = false): { value: T; loadedAt: number } | undefined {
+export function getCached<T>(
+  key: string,
+  force = false,
+): { value: T; loadedAt: number } | undefined {
   if (force) return undefined;
   const entry = cache.get(key) as CacheEntry<T> | undefined;
   if (!entry) return undefined;
@@ -23,7 +27,11 @@ export function getCached<T>(key: string, force = false): { value: T; loadedAt: 
   return { value: entry.value, loadedAt: entry.loadedAt };
 }
 
-export function setCached<T>(key: string, value: T, ttlMs = DEFAULT_CACHE_TTL_MS): { value: T; loadedAt: number } {
+export function setCached<T>(
+  key: string,
+  value: T,
+  ttlMs = DEFAULT_CACHE_TTL_MS,
+): { value: T; loadedAt: number } {
   const loadedAt = Date.now();
   cache.set(key, { value, loadedAt, expiresAt: loadedAt + ttlMs });
   return { value, loadedAt };

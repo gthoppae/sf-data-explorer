@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: Apache-2.0 */
 import fs from "node:fs/promises";
 import path from "node:path";
 import type { RunResult, SpaRow } from "./types.ts";
@@ -34,12 +35,20 @@ export function resultToJsonEnvelope(result: RunResult): string {
   )}\n`;
 }
 
-export async function saveResult(args: { cwd: string; result: RunResult; baseName: string; format: ExportFormat }): Promise<string> {
+export async function saveResult(args: {
+  cwd: string;
+  result: RunResult;
+  baseName: string;
+  format: ExportFormat;
+}): Promise<string> {
   const dir = path.join(args.cwd, ".sf-data-explorer", "exports");
   await fs.mkdir(dir, { recursive: true });
   const filename = `${safeFilePart(args.baseName)}-${timestampForFile()}.${args.format}`;
   const file = path.join(dir, filename);
-  const content = args.format === "json" ? resultToJsonEnvelope(args.result) : rowsToCsv(args.result.rows, args.result.columns);
+  const content =
+    args.format === "json"
+      ? resultToJsonEnvelope(args.result)
+      : rowsToCsv(args.result.rows, args.result.columns);
   await fs.writeFile(file, content, "utf8");
   return file;
 }

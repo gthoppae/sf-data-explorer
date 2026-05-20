@@ -1,6 +1,18 @@
+/* SPDX-License-Identifier: Apache-2.0 */
 import type { QueryValidationResult } from "./types.ts";
 
-const MUTATION_WORDS = ["INSERT", "UPDATE", "UPSERT", "DELETE", "UNDELETE", "MERGE", "CALL", "EXEC", "SYSTEM.", "DATABASE."];
+const MUTATION_WORDS = [
+  "INSERT",
+  "UPDATE",
+  "UPSERT",
+  "DELETE",
+  "UNDELETE",
+  "MERGE",
+  "CALL",
+  "EXEC",
+  "SYSTEM.",
+  "DATABASE.",
+];
 
 function stripLeadingCommentsAndWhitespace(text: string): string {
   let s = text.trim();
@@ -26,26 +38,44 @@ function hasMutationWord(text: string): string | undefined {
   return MUTATION_WORDS.find((word) => upper.includes(word));
 }
 
-export function validateSelectOnly(queryText: string, label: "SOQL" | "Data 360 SQL"): QueryValidationResult {
+export function validateSelectOnly(
+  queryText: string,
+  label: "SOQL" | "Data 360 SQL",
+): QueryValidationResult {
   const stripped = stripLeadingCommentsAndWhitespace(queryText);
   if (!stripped) return { ok: false, error: `${label} query is empty.` };
-  if (!/^SELECT\b/i.test(stripped)) return { ok: false, error: `${label} must start with SELECT in this read-only explorer.` };
+  if (!/^SELECT\b/i.test(stripped))
+    return { ok: false, error: `${label} must start with SELECT in this read-only explorer.` };
   const mutation = hasMutationWord(stripped);
-  if (mutation) return { ok: false, error: `${label} contains blocked token ${mutation}. This explorer is read-only.` };
+  if (mutation)
+    return {
+      ok: false,
+      error: `${label} contains blocked token ${mutation}. This explorer is read-only.`,
+    };
   const warnings: string[] = [];
-  if (!/\bLIMIT\s+\d+\b/i.test(stripped)) warnings.push(`${label} has no LIMIT. Consider adding one before running broad queries.`);
+  if (!/\bLIMIT\s+\d+\b/i.test(stripped))
+    warnings.push(`${label} has no LIMIT. Consider adding one before running broad queries.`);
   return { ok: true, warnings };
 }
 
 export function validateFindOnly(queryText: string): QueryValidationResult {
   const stripped = stripLeadingCommentsAndWhitespace(queryText);
   if (!stripped) return { ok: false, error: "SOSL query is empty." };
-  if (!/^FIND\b/i.test(stripped)) return { ok: false, error: "SOSL must start with FIND in this read-only explorer." };
+  if (!/^FIND\b/i.test(stripped))
+    return { ok: false, error: "SOSL must start with FIND in this read-only explorer." };
   const mutation = hasMutationWord(stripped);
-  if (mutation) return { ok: false, error: `SOSL contains blocked token ${mutation}. This explorer is read-only.` };
+  if (mutation)
+    return {
+      ok: false,
+      error: `SOSL contains blocked token ${mutation}. This explorer is read-only.`,
+    };
   const warnings: string[] = [];
-  if (!/\bRETURNING\b/i.test(stripped)) warnings.push("SOSL has no RETURNING clause; results may be broad.");
-  if (!/\bLIMIT\s+\d+\b/i.test(stripped)) warnings.push("SOSL has no per-object LIMIT. Consider adding one before running broad searches.");
+  if (!/\bRETURNING\b/i.test(stripped))
+    warnings.push("SOSL has no RETURNING clause; results may be broad.");
+  if (!/\bLIMIT\s+\d+\b/i.test(stripped))
+    warnings.push(
+      "SOSL has no per-object LIMIT. Consider adding one before running broad searches.",
+    );
   return { ok: true, warnings };
 }
 
