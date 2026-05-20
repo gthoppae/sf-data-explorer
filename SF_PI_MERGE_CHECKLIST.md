@@ -13,6 +13,7 @@ This package is structured to be merged into `github.com/salesforce/sf-pi` as `e
 - ✅ Extension README present: `extensions/sf-data-explorer/README.md`
 - ✅ Extension AGENTS.md present: `extensions/sf-data-explorer/AGENTS.md`
 - ✅ Source/tests are under `extensions/sf-data-explorer/{lib,tests}` to match sf-pi extension layout
+- ✅ Standard `/sf-*` panel contract is wired in source: `openCommandPanel`, `openInfoPanel`, lifecycle toggle helpers, `closeBeforeAction: isLifecycleToggleAction`, and `withSafeCommandHandler`
 
 Current validation result when this checklist was updated:
 
@@ -48,19 +49,15 @@ static heavy import check: passed
    npm run lint
    ```
 
-5. Resolve the standard `/sf-*` panel contract:
+5. Confirm the standard `/sf-*` panel contract:
 
-   sf-pi's `scripts/check-panel-consistency.mjs` expects command-owning extensions to use:
-   - `openCommandPanel`
-   - `openInfoPanel`
-   - lifecycle toggle helpers from `lib/common/extension-toggle.ts`
-   - `withSafeCommandHandler`
+   The standalone package now uses a no-args `/sf-data-explorer` command panel when sf-pi common helpers are available, with actions for `Open SOQL`, `Open SOSL`, `Open Data 360 SQL`, `Help`, `Close`, and lifecycle toggle. It falls back to the direct mode picker only when running outside sf-pi common helper availability.
 
-   The standalone package currently opens the explorer/mode picker directly. For an sf-pi PR, either:
-   - add the standard no-args `/sf-data-explorer` command panel with actions like `Open SOQL`, `Open SOSL`, `Open Data 360 SQL`, `Help`, and lifecycle toggle; or
-   - deliberately add a documented exemption if sf-pi maintainers prefer this command to behave as a direct TUI launcher.
+   During merge, run:
 
-   Preferred merge path: implement the standard command panel and let action rows open the existing explorer flows.
+   ```bash
+   npm run check:panels
+   ```
 
 6. Confirm boot-path behavior remains cache-first:
 
@@ -68,11 +65,7 @@ static heavy import check: passed
    npm run check:boot-path
    ```
 
-7. Confirm panel consistency once the standard panel is added:
-
-   ```bash
-   npm run check:panels
-   ```
+7. Confirm generated docs/catalog are up to date after adding the extension to root `package.json`.
 
 ## Runtime safety expectations
 

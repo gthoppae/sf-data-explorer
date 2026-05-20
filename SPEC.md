@@ -1338,7 +1338,7 @@ Recommended defaults:
 The current package scaffold implements the v1 deterministic explorer flows described above:
 
 - Package manifest, extension manifest, extension README, extension AGENTS.md, TypeScript config, and Pi extension entry point. Source and tests live under `extensions/sf-data-explorer/{lib,tests}` to match sf-pi extension layout.
-- Unified `/sf-data-explorer` command with mode picker and direct modes `soql`, `sosl`, and `sql`.
+- Unified `/sf-data-explorer` command with an sf-pi standard no-args command panel when sf-pi common helpers are available, fallback mode picker outside sf-pi, and direct modes `soql`, `sosl`, and `sql`.
 - Deep links of the form `/sf-data-explorer soql Account wh`, `/sf-data-explorer sosl Contact wh`, and `/sf-data-explorer sql ssot__Individual__dlm wh`.
 - Lazy dynamic-import transport over sf-pi internals, using `@salesforce/core` connection plumbing and sf-pi target-org/API-version resolution.
 - Generic three-pane explorer component with object list, field picker, editable query/result pane, table view, detail view, refresh, focus layout, shortcut help (`?`), explorer switcher (`t`), and JSON/CSV export. Primary keybindings are lowercase (`w` where/search term, `l` limit, `s` save); uppercase `L`/`S` remain accepted as compatibility aliases. Save uses an in-TUI menu and keeps the explorer open after writing a file so users can save another format or go back. Copy actions close the explorer before setting Pi editor text so the global editor update is visible in clients that do not update the editor under a mounted custom TUI.

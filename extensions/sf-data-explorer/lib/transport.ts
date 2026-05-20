@@ -230,7 +230,7 @@ async function loadModules(sfPiPath: string): Promise<SfPiModules> {
   };
 }
 
-async function resolveSfPiPath(): Promise<string> {
+export async function resolveSfPiPath(): Promise<string> {
   const candidates: string[] = [];
   if (process.env.SF_DATA_EXPLORER_SFPI_PATH)
     candidates.push(process.env.SF_DATA_EXPLORER_SFPI_PATH);
