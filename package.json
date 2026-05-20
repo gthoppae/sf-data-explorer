@@ -1,0 +1,41 @@
+{
+  "name": "sf-data-explorer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Read-only interactive Salesforce SOQL, SOSL, and Data 360 SQL explorer for pi using sf-pi transport plumbing.",
+  "keywords": [
+    "pi-package",
+    "pi-coding-agent",
+    "salesforce",
+    "sf-pi",
+    "soql",
+    "sosl",
+    "data360"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "pi": {
+    "extensions": [
+      "./extensions/sf-data-explorer/index.ts"
+    ]
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": ">=0.75.0",
+    "@earendil-works/pi-tui": ">=0.75.0",
+    "typebox": "*"
+  },
+  "devDependencies": {
+    "@earendil-works/pi-coding-agent": "^0.75.3",
+    "@earendil-works/pi-tui": "^0.75.0",
+    "@types/node": "^25.7.0",
+    "typebox": "^1.1.37",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.6"
+  }
+}
