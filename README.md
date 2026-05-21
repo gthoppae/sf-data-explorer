@@ -5,14 +5,14 @@ Read-only interactive Salesforce data explorer for pi.
 ## Commands
 
 ```text
-/sf-data-explorer soql wh
-/sf-data-explorer sosl wh
-/sf-data-explorer sql wh
+/sf-data-explorer soql my-org
+/sf-data-explorer sosl my-org
+/sf-data-explorer sql my-org
 
 # Deep-link to an object/table and org:
-/sf-data-explorer soql Account wh
-/sf-data-explorer sosl Contact wh
-/sf-data-explorer sql ssot__Individual__dlm wh
+/sf-data-explorer soql Account my-org
+/sf-data-explorer sosl Contact my-org
+/sf-data-explorer sql Account_Home my-org
 ```
 
 Modes:
