@@ -2,6 +2,22 @@
 
 Read-only interactive Salesforce data explorer for pi.
 
+## Screenshots
+
+Below are recent screenshots demonstrating the TUI for each mode (SOQL, SOSL, Data 360 SQL). The images are included in the repository at assets/screenshots/.
+
+### SOQL (select fields, run SOQL)
+
+![SOQL explorer](assets/screenshots/soql.png)
+
+### SOSL (search across objects)
+
+![SOSL explorer](assets/screenshots/sosl.png)
+
+### Data 360 SQL (DMO/DLO)
+
+![Data 360 SQL](assets/screenshots/sql.png)
+
 ## Commands
 
 ```text
