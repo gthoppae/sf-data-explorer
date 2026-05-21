@@ -8,15 +8,15 @@ Below are recent screenshots demonstrating the TUI for each mode (SOQL, SOSL, Da
 
 ### SOQL (select fields, run SOQL)
 
-![SOQL explorer](assets/screenshots/soql.png)
+![SOQL explorer — TUI showing object list, field selection, and query results table](assets/screenshots/soql.png)
 
 ### SOSL (search across objects)
 
-![SOSL explorer](assets/screenshots/sosl.png)
+![SOSL explorer — TUI showing searchable objects, selected fields, and search results](assets/screenshots/sosl.png)
 
 ### Data 360 SQL (DMO/DLO)
 
-![Data 360 SQL](assets/screenshots/sql.png)
+![Data 360 SQL explorer — TUI showing DMO/DLO catalog, selected fields, and query results](assets/screenshots/sql.png)
 
 ## Commands
 
