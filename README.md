@@ -2,6 +2,19 @@
 
 Read-only interactive Salesforce data explorer for pi.
 
+> **📦 Merged upstream.** The canonical implementation now lives in
+> [`salesforce/sf-pi`](https://github.com/salesforce/sf-pi) at
+> [`extensions/sf-data-explorer/`](https://github.com/salesforce/sf-pi/tree/main/extensions/sf-data-explorer)
+> (merged via [PR #261](https://github.com/salesforce/sf-pi/pull/261) on 2026-05-21).
+> Bug reports, feature requests, and patches should go to `salesforce/sf-pi`.
+>
+> This repository is **archived** and preserves the pre-merge, standalone shape of the
+> extension as the reference implementation linked from
+> [proposal issue #260](https://github.com/salesforce/sf-pi/issues/260). The upstream
+> version diverges: it uses static imports of sf-pi panel helpers, a
+> `requirePiVersion` gate, and the maintainer's session-lifecycle boot-path fix.
+> Install via `pi install salesforce/sf-pi` to get the current code.
+
 ## Screenshots
 
 Below are recent screenshots demonstrating the TUI for each mode (SOQL, SOSL, Data 360 SQL). The images are included in the repository at assets/screenshots/.
